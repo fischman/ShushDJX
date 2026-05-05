@@ -7,13 +7,16 @@ X" speak its introductions/summaries/commentary between sets of songs.
 
 ## Operation
 
-On initial launch it will request permission to read notifications
-(which is how it detects that DJ X is speaking), and subsequently will
-be triggered by Android for each notification. When triggered by
-anything other than Spotify it will ignore the notification. Spotify
-notifications that are not DJ X's `Up next`, are also ignored. Finally
-if the notification _is_ for `Up next`, the app will send a "next track"
-event to skip the spoken segment.
+On initial launch it will request permission to read notifications in
+order to register for MediaSession metadata updates (which is how it
+detects that DJ X is speaking). Subsequently it will drop the
+individual checkmarks in the Read Permissions system settings and not
+read any notification contents.
+
+When MediaSession metadata change is detected, if it shows for `Up
+next`, the app will send a "next track" event to skip the spoken
+segment (and retry a few times until it detects success, since Spotify
+sometimes ignores the request).
 
 ## Development notes to self
 - Once per VM/container, run `.headless/install-android-sdk.sh`

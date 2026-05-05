@@ -21,7 +21,7 @@ class MainActivity : Activity() {
         } else {
             AlertDialog.Builder(this)
                 .setTitle("Permission Required")
-                .setMessage("ShushDJX needs notification access to watch Spotify's now-playing notification and skip \"DJ X\" interludes.\n\nTap OK to open Settings and then grant access.")
+                .setMessage("ShushDJX needs notification access to watch Spotify's MediaSession and skip \"DJ X\" interludes.\n\nTap OK to open Settings and then grant access.\nAfter this grant, the app unchecks all the boxes and never reads any notifications.")
                 .setPositiveButton("OK") { _, _ ->
                     val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_DETAIL_SETTINGS).apply {
                         putExtra(
