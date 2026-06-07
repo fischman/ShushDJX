@@ -5,6 +5,7 @@
 # Flags:
 #   --build-only - Don't deploy.
 #   --release - Build release instead of debug APK.
+#   --no-launch - Don't launch after deploying.
 
 set -euo pipefail
 
@@ -14,10 +15,12 @@ PACKAGE="org.fischman.shushdjx"
 
 BUILD_ONLY=false
 RELEASE=false
+NO_LAUNCH=false
 for arg in "$@"; do
   case "$arg" in
       --build-only) BUILD_ONLY=true ;;
       --release) RELEASE=true ;;
+      --no-launch) NO_LAUNCH=true ;;
       *) echo "Unknown flag $arg" >&2 ; exit 1 ;;
   esac
 done
@@ -49,7 +52,9 @@ else
     adb install "$APK"
 fi
 
-echo "==> Launching..."
-adb shell am start -n "${PACKAGE}/${PACKAGE}.MainActivity"
+if ! $NO_LAUNCH; then
+    echo "==> Launching..."
+    adb shell am start -n "${PACKAGE}/${PACKAGE}.MainActivity"
+fi
 
 echo "==> Done."
