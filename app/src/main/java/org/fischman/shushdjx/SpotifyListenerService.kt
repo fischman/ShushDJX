@@ -10,7 +10,7 @@ import android.util.Log
 class SpotifyListenerService : NotificationListenerService() {
 
     private var spotifyController: MediaController? = null
-    private var lastMetadataTitle: String? = null
+    private var lastMetadataArtist: String? = null
     private var lastSkipTime = 0L
 
     companion object {
@@ -23,16 +23,15 @@ class SpotifyListenerService : NotificationListenerService() {
 
     private val metadataCallback = object : MediaController.Callback() {
         override fun onMetadataChanged(metadata: MediaMetadata?) {
-            val title = metadata?.getString(MediaMetadata.METADATA_KEY_TITLE) ?: return
-            if (title == lastMetadataTitle) return
-            lastMetadataTitle = title
+            val artist = metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: return
+            if (artist == lastMetadataArtist) return
+            lastMetadataArtist = artist
 
-            if (!title.equals("Up next", ignoreCase = true)) return
+            if (artist != "DJ X") return
 
             val now = System.currentTimeMillis()
             if (now - lastSkipTime < COOLDOWN_MS) return
 
-            Log.i(TAG, "DJ Next up detected; skipping.")
             attemptSkip(1)
         }
     }
@@ -41,8 +40,8 @@ class SpotifyListenerService : NotificationListenerService() {
         val ctrl = spotifyController ?: return // Might be null on a postDelayed firing.
 
         if (attempt > 1) {
-            val currentTitle = ctrl.metadata?.getString(MediaMetadata.METADATA_KEY_TITLE) ?: ""
-            if (!currentTitle.equals("Up next", ignoreCase = true)) {
+            val currentArtist = ctrl.metadata?.getString(MediaMetadata.METADATA_KEY_ARTIST) ?: ""
+            if (currentArtist != "DJ X") {
                 Log.i(TAG, "Skip succeeded on attempt ${attempt - 1}")
                 return
             }
