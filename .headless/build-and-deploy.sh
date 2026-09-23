@@ -5,6 +5,7 @@
 # Flags:
 #   --build-only - Don't deploy.
 #   --release - Build release instead of debug APK.
+#   --release-aab - Build bundle for Play Console deployment.
 #   --no-launch - Don't launch after deploying.
 
 set -euo pipefail
@@ -15,11 +16,13 @@ PACKAGE="org.fischman.shushdjx"
 
 BUILD_ONLY=false
 RELEASE=false
+RELEASE_AAB=false
 NO_LAUNCH=false
 for arg in "$@"; do
   case "$arg" in
       --build-only) BUILD_ONLY=true ;;
       --release) RELEASE=true ;;
+      --release-aab) RELEASE_AAB=true ; BUILD_ONLY=true ;;
       --no-launch) NO_LAUNCH=true ;;
       *) echo "Unknown flag $arg" >&2 ; exit 1 ;;
   esac
@@ -28,14 +31,21 @@ done
 TASK="assembleDebug"
 APK="app/build/outputs/apk/debug/app-debug.apk"
 if $RELEASE; then
-    TASK="assembleRelease"
-    APK="$(echo "$APK" | sed -e 's/debug/release/g')"
+    TASK="assembleDebugRelease"
+    APK="$(echo "$APK" | sed -e 's/debug/debugRelease/g')"
+fi
+if $RELEASE_AAB; then
+    TASK="bundleRelease"
 fi
 
 echo "==> Building $TASK..."
 ./gradlew --warning-mode all "$TASK"
 
-echo "==> APK: $APK ($(du -h "$APK" | cut -f1))"
+if $RELEASE_AAB; then
+    echo "==> AAB: $(ls -hla ./app/build/outputs/bundle/release/app-release.aab)"
+else
+    echo "==> APK: $(ls -hla ./$APK)"
+fi
 
 if $BUILD_ONLY; then
   exit 0

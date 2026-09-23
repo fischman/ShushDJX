@@ -10,17 +10,23 @@ android {
     defaultConfig {
         applicationId = "org.fischman.shushdjx"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 36
+        versionCode = 3
+        versionName = "0.3"
     }
 
     signingConfigs {
-        create("release") { // Re-use debug keystore for release. YOLO.
+        create("debugRelease") { // Re-use debug keystore for release APK. YOLO.
             storeFile = file(System.getProperty("user.home") + "/.android/debug.keystore")
             storePassword = "android"
             keyAlias = "androiddebugkey"
             keyPassword = "android"
+        }
+        create("upload") {
+            storeFile = file(System.getProperty("user.home") + "/.android/upload-keystore.jks")
+            keyAlias = "upload"
+            storePassword = "yoyoyo" // The JKS itself is the secret; only non-empty key b/c keytool refuses empty passwords.
+            keyPassword = "yoyoyo" // The JKS itself is the secret; only non-empty key b/c keytool refuses empty passwords.
         }
     }
 
@@ -30,7 +36,12 @@ android {
         }
         getByName("release") {
             isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.getByName("upload")
+        }
+
+        create("debugRelease") {
+            initWith(getByName("release"))
+            signingConfig = signingConfigs.getByName("debugRelease")
         }
     }
 

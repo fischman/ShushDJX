@@ -4,7 +4,7 @@
 
     <application
         android:label="ShushDJX"
-        android:icon="@android:drawable/ic_media_next"
+        android:icon="@mipmap/ic_launcher"
         android:theme="@android:style/Theme.DeviceDefault.Light.NoActionBar">
 
         <activity
