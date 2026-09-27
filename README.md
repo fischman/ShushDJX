@@ -15,7 +15,7 @@ Users who don't want to build the .apk from source have two choices:
 
 On initial launch it will request permission to read notifications in
 order to register for MediaSession metadata updates (which is how it
-detects that DJ X is speaking). Subsequently it will drop the
+detects that DJ X is speaking). Subsequently it will [drop](https://github.com/fischman/ShushDJX/blob/638a1bd81c6b21e194315e744d055e198c22cfc2/app/src/main/java/org/fischman/shushdjx/SpotifyListenerService.kt#L76) the
 individual checkmarks in the Read Permissions system settings and not
 read any notification contents.
 
