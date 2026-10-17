@@ -32,6 +32,7 @@ class SpotifyListenerService : NotificationListenerService() {
             val now = System.currentTimeMillis()
             if (now - lastSkipTime < COOLDOWN_MS) return
 
+            SkipLog.record()
             attemptSkip(1)
         }
     }
