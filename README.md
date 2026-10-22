@@ -25,6 +25,7 @@ segment (and retry a few times until it detects success, since Spotify
 sometimes ignores the request).
 
 ## Development notes to self
+- Ensure checkout has submodules; either `git clone --recurse-submodules <url>` or if already cloned: `git submodule update --init --recursive`
 - Once per VM/container, run `.headless/install-android-sdk.sh`
 - To build a debug APK: `.headless/build-and-deploy.sh` (with optional `--build-only` to skip install/run)
 - To build a release APK: `.headless/build-and-deploy.sh --release` (with optional `--build-only` to skip install/run)
