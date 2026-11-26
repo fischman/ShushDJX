@@ -1,3 +1,0 @@
-[submodule ".headless"]
-	path = .headless
-	url = https://github.com/fischman/headless-android-helpers.git
